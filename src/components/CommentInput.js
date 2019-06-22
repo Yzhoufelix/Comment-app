@@ -8,17 +8,25 @@ class CommentInput extends Component {
         <div className="comment-field">
           <span className="comment-field-name">Username:</span>
           <div className="comment-field-input">
-            <input />
+            <input
+              name="username"
+              value={this.props.data.username}
+              onChange={this.props.handleChange}
+            />
           </div>
         </div>
         <div className="comment-field">
-          <span className="comment-field-name">Comment:</span>
+          <span className="comment-field-name">Content:</span>
           <div className="comment-field-input">
-            <textarea />
+            <textarea
+              name="content"
+              value={this.props.data.content}
+              onChange={this.props.handleChange}
+            />
           </div>
         </div>
         <div className="comment-field-button">
-          <button>Submit</button>
+          <button onClick={this.props.handleSubmit}>Submit</button>
         </div>
       </div>
     );
