@@ -8,7 +8,8 @@ class CommentApp extends Component {
     super();
     this.state = {
       username: "",
-      content: ""
+      content: "",
+      comments: [] // To be transferd to CommentList
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,6 +23,9 @@ class CommentApp extends Component {
     });
   }
 
+  // Call onSubmit when user clicks submit button,
+  // then keep then username set content box to empty
+
   handleSubmit() {
     if (this.onSubmit) {
       const { username, content } = this.state;
@@ -32,8 +36,17 @@ class CommentApp extends Component {
     });
   }
 
+  // comments: [{username, content, id}]
   onSubmit(comment) {
-    console.log(comment);
+    if (!comment.username) {
+      return alert("Please enter your username.");
+    } else if (!comment.content) {
+      return alert("Please add some content.");
+    }
+    this.state.comments.push(comment);
+    this.setState({
+      comments: this.state.comments
+    });
   }
 
   render() {
@@ -43,9 +56,8 @@ class CommentApp extends Component {
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
           data={this.state}
-          onSubmit={this.onSubmit}
         />
-        <CommentList />
+        <CommentList comments={this.state.comments} />
       </div>
     );
   }
