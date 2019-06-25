@@ -10,6 +10,7 @@ class CommentApp extends Component {
       username: "",
       content: "",
       comments: [] // To be transferd to CommentList
+      // timeString: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,6 +21,7 @@ class CommentApp extends Component {
   componentWillMount() {
     this._loadUsername();
     this._loadComments();
+    // this._updateTimeString();
   }
 
   handleChange(event) {
@@ -31,16 +33,29 @@ class CommentApp extends Component {
 
   // Call onSubmit when user clicks submit button,
   // then keep then username set content box to empty
-
   handleSubmit() {
     if (this.onSubmit) {
       const { username, content } = this.state;
-      this.onSubmit({ username, content });
+      // const time = new Date();
+      this.onSubmit({
+        username: username,
+        content: content,
+        createdTime: Date.now()
+      });
     }
     this.setState({
       content: ""
     });
   }
+
+  // _updateTimeString() {
+  //   const now = Date.now();
+  //   const duration = (now - then) / 1000;
+  //   const timeGap =
+  //     duration > 60
+  //       ? `$(Math.round(duration / 60)) min ago`
+  //       : `$(Math.round(Math.max(duration,1))) s ago`;
+  // }
 
   // comments: [{username, content, id}]
   onSubmit(comment) {
@@ -54,7 +69,7 @@ class CommentApp extends Component {
     this.setState({
       comments: comments
     });
-    this._saveComments(comments);
+    this._saveComments(comments); // save comment in localstorage
   }
 
   // save username in localstorage and autoload username after reloading the page(username persistence)
@@ -76,7 +91,7 @@ class CommentApp extends Component {
     }
   }
 
-  // comment persistence
+  // content persistence
   _saveComments(comments) {
     localStorage.setItem("comments", JSON.stringify(comments));
   }
@@ -92,6 +107,7 @@ class CommentApp extends Component {
   }
 
   render() {
+    console.log(this.state.comments);
     return (
       <div className="wrapper">
         <CommentInput
