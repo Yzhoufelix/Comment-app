@@ -14,6 +14,11 @@ class CommentApp extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
+  }
+
+  componentWillMount() {
+    this._loadUsername();
   }
 
   handleChange(event) {
@@ -49,12 +54,32 @@ class CommentApp extends Component {
     });
   }
 
+  // save username in localstorage and autoload username after reloading the page
+  handleBlur(event) {
+    const { value } = event.target;
+    this._saveUsername(value);
+  }
+
+  _saveUsername(username) {
+    localStorage.setItem("username", username);
+  }
+
+  _loadUsername() {
+    const username = localStorage.getItem("username");
+    if (username) {
+      this.setState({
+        username: username
+      });
+    }
+  }
+
   render() {
     return (
       <div className="wrapper">
         <CommentInput
-          handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit}
+          onChange={this.handleChange}
+          onSubmit={this.handleSubmit}
+          onBlur={this.handleBlur}
           data={this.state}
         />
         <CommentList comments={this.state.comments} />
