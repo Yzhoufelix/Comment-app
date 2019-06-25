@@ -19,6 +19,7 @@ class CommentApp extends Component {
 
   componentWillMount() {
     this._loadUsername();
+    this._loadComments();
   }
 
   handleChange(event) {
@@ -48,13 +49,15 @@ class CommentApp extends Component {
     } else if (!comment.content) {
       return alert("Please add some content.");
     }
-    this.state.comments.push(comment);
+    const { comments } = this.state;
+    comments.push(comment);
     this.setState({
-      comments: this.state.comments
+      comments: comments
     });
+    this._saveComments(comments);
   }
 
-  // save username in localstorage and autoload username after reloading the page
+  // save username in localstorage and autoload username after reloading the page(username persistence)
   handleBlur(event) {
     const { value } = event.target;
     this._saveUsername(value);
@@ -69,6 +72,21 @@ class CommentApp extends Component {
     if (username) {
       this.setState({
         username: username
+      });
+    }
+  }
+
+  // comment persistence
+  _saveComments(comments) {
+    localStorage.setItem("comments", JSON.stringify(comments));
+  }
+
+  _loadComments() {
+    let comments = localStorage.getItem("comments");
+    if (comments) {
+      comments = JSON.parse(comments);
+      this.setState({
+        comments: comments
       });
     }
   }
