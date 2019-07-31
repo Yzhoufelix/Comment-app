@@ -22,7 +22,7 @@ class Comment extends Component {
     this._timer = setInterval(this._updateTimeString.bind(this), 3000);
   }
   componentWillUnmount() {
-    clearInterval(this._timer);
+    clearInterval(this._timer); // clean the timer
   }
 
   // Displays the time a comment was posted
@@ -61,12 +61,26 @@ class Comment extends Component {
     }
   }
 
+  _getProcessedContent(content) {
+    return content
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;') // xss filters
+      .replace(/>/g, '&gt;')
+      .replace(/'/g, '&#039;')
+      .replace(/"/g, '&quot;')
+      .replace(/`([\S\s]+?)`/g, '<code>$1</code>');
+  }
+
   render() {
     const { comment } = this.props;
     return (
       <div className='comment'>
         <span className='comment-username'>{comment.username}</span>：
-        <p>{comment.content}</p>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: this._getProcessedContent(comment.content)
+          }}
+        />
         <span className='comment-createdtime'>{this.state.timeString}</span>
         <span className='comment-delete' onClick={this.handleDeleteComment}>
           Delete
