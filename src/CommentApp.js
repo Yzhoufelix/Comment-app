@@ -46,7 +46,7 @@ class CommentApp extends Component {
     });
   }
 
-  // comments: [{username, content, id}]
+  // comments form: [{username, content, createdTime}]
   onSubmit(comment) {
     if (!comment.username) {
       return alert('Please enter your username.');
